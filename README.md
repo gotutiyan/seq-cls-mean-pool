@@ -1,4 +1,4 @@
-# bert-seq-cls-avg-pooling
+# seq-cls-avg-pool
 An extended version of BERTForSequenceClassification to use mean pooling.  
 It wraps existing `**ForSequenceClassification`.
 
