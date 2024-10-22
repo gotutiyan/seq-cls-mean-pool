@@ -11,7 +11,7 @@ The following classes are supported now. (Some of the other classes may also wor
 
 # Install
 ```sh
-pip install git+https://github.com/gotutiyan/bert-seq-cls-avg-pooling
+pip install git+https://github.com/gotutiyan/seq-cls-avg-pool
 ```
 
 # Usage
