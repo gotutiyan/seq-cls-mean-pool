@@ -1,4 +1,4 @@
-# seq-cls-avg-pool
+# seq-cls-mean-pool
 An extended version of BERTForSequenceClassification to use mean pooling.  
 It wraps existing `**ForSequenceClassification`.
 
@@ -11,7 +11,7 @@ The following classes are supported now. (Some of the other classes may also wor
 
 # Install
 ```sh
-pip install git+https://github.com/gotutiyan/seq-cls-avg-pool
+pip install git+https://github.com/gotutiyan/seq-cls-mean-pool
 ```
 
 # Usage
