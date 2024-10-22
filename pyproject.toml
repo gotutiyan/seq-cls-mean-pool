@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seq_cls_mean_pool"
+version = "0.0.1"
+dependencies = [
+  "transformers >= 4.39.0, ==4.*",
+  "torch >= 2.3.0, ==2.*",
+]
+requires-python = ">=3.9"
+authors = [
+    {name = "Takumi Goto"}
+]
+description = "An extended version of BERTForSequenceClassification to use mean pooling."
+readme = "README.md"
+license = {file = "LICENSE"}
+
+[tool.setuptools]
+packages = ["seq_cls_mean_pool"]
