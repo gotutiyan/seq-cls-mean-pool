@@ -1,4 +1,4 @@
-# seq-cls-mean-pool
+# bert-seq-cls-avg-pooling
 An extended version of BERTForSequenceClassification to use mean pooling.  
 It wraps existing `**ForSequenceClassification`.
 
@@ -11,42 +11,60 @@ The following classes are supported now. (Some of the other classes may also wor
 
 # Install
 ```sh
-pip install git+https://github.com/gotutiyan/seq-cls-mean-pool
+pip install git+https://github.com/gotutiyan/bert-seq-cls-avg-pooling
 ```
 
 # Usage
-The interface is the same as `**ForSequenceClassification`.
+
+### Loading
+- Case 1: Initizalize by giving an instance of `AutoModelForSequenceClassification`.
 
 ```python
 from seq_cls_mean_pool import AutoModelForSequenceClassificationMeanPool
+from transformers import AutoModelForSequenceClassification
+
+base_model = AutoModelForSequenceClassification.from_pretrained('google-bert/bert-base-uncased')
+model = AutoModelForSequenceClassificationMeanPool(base_model)
+```
+
+- Case 2: Use `from_pretrained()`.
+
+```python
+from seq_cls_mean_pool import AutoModelForSequenceClassificationMeanPool
+
+model = AutoModelForSequenceClassificationMeanPool.from_pretrained('google-bert/bert-base-uncased')
+```
+
+### Forwarding
+The interface is the same as `**ForSequenceClassification`.
+
+```python
 from transformers import AutoTokenizer
+from transformers.modeling_outputs import SequenceClassifierOutput
+from seq_cls_mean_pool import AutoModelForSequenceClassificationMeanPool
 import torch
 import torch.optim as optim
 
-models = [
+model = AutoModelForSequenceClassificationMeanPool.from_pretrained(
     'google-bert/bert-base-cased',
-    'xlnet/xlnet-base-cased',
-    'FacebookAI/roberta-base',
-    'microsoft/deberta-v3-base',
-    'google/electra-large-discriminator'
-]
-for m in models:
-    print(m)
-    # You can use .from_pretrained
-    model = AutoModelForSequenceClassificationMeanPool.from_pretrained(m, num_labels=2)
-    tokenizer = AutoTokenizer.from_pretrained(m)
-    optimizer = optim.Adam(model.parameters())
-    sent = ['this is a sample sentence.', 'this code is a sample script.']
-    encode = tokenizer(sent, padding=True, return_tensors='pt')
-    encode['labels'] = torch.tensor([0, 1])
-    output = model(**encode)
-    optimizer.zero_grad()
-    output.loss.backward()
-    optimizer.step()
+    num_labels=2
+)
+tokenizer = AutoTokenizer.from_pretrained('google-bert/bert-base-cased')
+optimizer = optim.Adam(model.parameters())
+sent = ['this is a sample sentence.', 'this is a sample script.']
+encode = tokenizer(sent, padding=True, return_tensors='pt')
+encode['labels'] = torch.tensor([0, 1])
+output: SequenceClassifierOutput = model(**encode)
+
+# For training
+optimizer.zero_grad()
+output.loss.backward()
+optimizer.step()
+
+# For predicting
+predictions = torch.argmax(output.logits, dim=-1)
     
-    # You can use save_pretrained.
-    # The instance of `**ForSequenceClassification` is save (not instance of `AutoModelForSequenceClassificationMeanPool`). 
-    model.save_pretrained('sample/')
-    # You can load the checkpoint via from_pretrained()
-    new_model = AutoModelForSequenceClassificationMeanPool.from_pretrained('sample/')
+# You can use save_pretrained.
+# The instance of `**ForSequenceClassification` is save (not instance of `AutoModelForSequenceClassificationMeanPool`). 
+model.save_pretrained('sample/')
 ```

@@ -29,11 +29,9 @@ class AutoModelForSequenceClassificationMeanPool(nn.Module):
         attention_mask: Optional[torch.Tensor] = None,
         token_type_ids: Optional[torch.Tensor] = None,
         position_ids: Optional[torch.Tensor] = None,
-        head_mask: Optional[torch.Tensor] = None,
         inputs_embeds: Optional[torch.Tensor] = None,
         labels: Optional[torch.Tensor] = None,
         output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
     ) -> Union[Tuple[torch.Tensor], SequenceClassifierOutput]:
         r"""
@@ -64,7 +62,7 @@ class AutoModelForSequenceClassificationMeanPool(nn.Module):
         # Some implementations of the classification layer \
         #   take as input a hidden representation of all tokens \
         #   and extract only the first token in [:, 0, :].
-        # This is the corresponding process.
+        # So change shape from (batch, hidden) -> (batch, 1, hidden) by unsqueeze(). 
         for model_cls in [RobertaForSequenceClassification, ElectraForSequenceClassification]:
             if isinstance(self.model, model_cls):
                 pooled_output = torch.unsqueeze(pooled_output, 1)
@@ -116,3 +114,7 @@ class AutoModelForSequenceClassificationMeanPool(nn.Module):
     
     def save_pretrained(self, save_path, **kwards):
         self.model.save_pretrained(save_path, **kwards)
+
+    @property
+    def device(self):
+        return self.model.device
