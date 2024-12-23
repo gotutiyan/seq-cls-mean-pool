@@ -1,7 +1,8 @@
 from transformers import (
     AutoModelForSequenceClassification,
     RobertaForSequenceClassification,
-    ElectraForSequenceClassification
+    ElectraForSequenceClassification,
+    XLMRobertaForSequenceClassification
 )
 from transformers.modeling_outputs import SequenceClassifierOutput
 import torch
@@ -63,10 +64,9 @@ class AutoModelForSequenceClassificationMeanPool(nn.Module):
         #   take as input a hidden representation of all tokens \
         #   and extract only the first token in [:, 0, :].
         # So change shape from (batch, hidden) -> (batch, 1, hidden) by unsqueeze(). 
-        for model_cls in [RobertaForSequenceClassification, ElectraForSequenceClassification]:
+        for model_cls in [RobertaForSequenceClassification, ElectraForSequenceClassification, XLMRobertaForSequenceClassification]:
             if isinstance(self.model, model_cls):
                 pooled_output = torch.unsqueeze(pooled_output, 1)
-        
         # The classifier name is different depending on models.
         logits = None
         if hasattr(self.model, 'classifier'):

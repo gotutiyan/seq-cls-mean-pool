@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "seq_cls_mean_pool"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
   "transformers >= 4.39.0, ==4.*",
   "torch >= 2.3.0, ==2.*",
@@ -17,5 +17,6 @@ description = "An extended version of BERTForSequenceClassification to use mean 
 readme = "README.md"
 license = {file = "LICENSE"}
 
-[tool.setuptools]
-packages = ["seq_cls_mean_pool"]
+[tool.setuptools.packages.find]
+include = ["seq_cls_mean_pool*"]
+namespaces = false

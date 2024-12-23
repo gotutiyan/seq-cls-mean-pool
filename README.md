@@ -8,6 +8,7 @@ The following classes are supported now. (Some of the other classes may also wor
 - `RobertaForSequenceClassification`
 - `DebertaV2ForSequenceClassification`
 - `ElectraForSequenceClassification`
+- `XLMRobertaForSequenceClassification`
 
 # Install
 ```sh
